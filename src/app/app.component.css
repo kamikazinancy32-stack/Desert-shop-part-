@@ -1,0 +1,27 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .layout {
+    padding: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .layout {
+    grid-template-columns: 1fr 24rem;
+    align-items: start;
+    padding: 5.5rem 7rem;
+  }
+
+  .layout__cart {
+    position: sticky;
+    top: 1.5rem;
+  }
+}

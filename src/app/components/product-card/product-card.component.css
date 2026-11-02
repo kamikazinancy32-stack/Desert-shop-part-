@@ -1,0 +1,96 @@
+.card__media {
+  position: relative;
+  margin-bottom: 2.375rem;
+}
+
+.card__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  border: 2px solid transparent;
+  transition: border-color 0.2s ease;
+}
+
+/* Highlight when the dessert is in the cart */
+.card__image--selected {
+  border-color: var(--red);
+}
+
+/* Shared shape of the two buttons that sit on the image's bottom edge */
+.add-btn,
+.stepper {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  width: 10rem;
+  height: 2.75rem;
+  border-radius: 999px;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: var(--white);
+  border: 1px solid var(--rose-400);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--rose-900);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.add-btn:hover {
+  color: var(--red);
+  border-color: var(--red);
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  background-color: var(--red);
+  color: var(--white);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.stepper__btn {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid var(--white);
+  border-radius: 50%;
+  color: var(--white);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.stepper__btn:hover {
+  background-color: var(--white);
+  color: var(--red);
+}
+
+.stepper__btn:focus-visible {
+  outline-color: var(--white);
+}
+
+.card__category {
+  font-size: 0.875rem;
+  color: var(--rose-500);
+}
+
+.card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.card__price {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--red);
+}

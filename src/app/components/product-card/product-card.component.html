@@ -1,0 +1,60 @@
+<article class="card">
+  <div class="card__media">
+    <picture>
+      <source media="(min-width: 1024px)" [srcset]="product.image.desktop" width="502" height="480" />
+      <source media="(min-width: 640px)" [srcset]="product.image.tablet" width="427" height="424" />
+      <img
+        class="card__image"
+        [ngClass]="{ 'card__image--selected': inCart }"
+        [src]="product.image.mobile"
+        [alt]="product.name"
+        width="654"
+        height="424"
+      />
+    </picture>
+
+    <!-- Not in the cart yet: show "Add to Cart" -->
+    <button
+      *ngIf="!inCart; else stepper"
+      type="button"
+      class="add-btn"
+      (click)="onAdd()"
+    >
+      <img src="assets/images/icon-add-to-cart.svg" alt="" width="21" height="20" />
+      Add to Cart
+    </button>
+
+    <!-- Already in the cart: show the quantity stepper -->
+    <ng-template #stepper>
+      <div class="stepper" role="group" [attr.aria-label]="'Quantity of ' + product.name">
+        <button
+          type="button"
+          class="stepper__btn"
+          (click)="onDecrease()"
+          [attr.aria-label]="'Remove one ' + product.name"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="2" viewBox="0 0 10 2" aria-hidden="true">
+            <path fill="currentColor" d="M0 .375h10v1.25H0V.375Z" />
+          </svg>
+        </button>
+        <span class="stepper__count" aria-live="polite">{{ quantity }}</span>
+        <button
+          type="button"
+          class="stepper__btn"
+          (click)="onAdd()"
+          [attr.aria-label]="'Add one more ' + product.name"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <path fill="currentColor" d="M10 4.375H5.625V0h-1.25v4.375H0v1.25h4.375V10h1.25V5.625H10v-1.25Z" />
+          </svg>
+        </button>
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="card__info">
+    <p class="card__category">{{ product.category }}</p>
+    <h2 class="card__name">{{ product.name }}</h2>
+    <p class="card__price">{{ product.price | currency: 'USD' }}</p>
+  </div>
+</article>

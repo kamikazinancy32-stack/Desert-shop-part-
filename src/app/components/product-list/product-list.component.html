@@ -1,0 +1,22 @@
+<section class="products" aria-labelledby="products-title">
+  <h1 id="products-title" class="products__title">Desserts</h1>
+
+  <ul *ngIf="products.length > 0; else noProducts" class="products__grid">
+    <li
+      *ngFor="let product of products; let i = index; trackBy: trackByName"
+      class="products__item"
+      [ngStyle]="{ 'animation-delay': i * 60 + 'ms' }"
+    >
+      <app-product-card
+        [product]="product"
+        [quantity]="quantityOf(product)"
+        (add)="add.emit($event)"
+        (decrease)="decrease.emit($event)"
+      ></app-product-card>
+    </li>
+  </ul>
+
+  <ng-template #noProducts>
+    <p class="products__empty">No desserts are available right now. Please check back soon.</p>
+  </ng-template>
+</section>
