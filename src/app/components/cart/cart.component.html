@@ -1,8 +1,8 @@
 <aside class="cart" aria-labelledby="cart-title">
-  <h2 id="cart-title" class="cart__title">Your Cart ({{ totalQuantity }})</h2>
+  <h2 id="cart-title" class="cart__title">Your Cart ({{ cart.totalQuantity }})</h2>
 
   <!-- Empty cart -->
-  <div *ngIf="items.length === 0; else filledCart" class="cart__empty">
+  <div *ngIf="cart.items.length === 0; else filledCart" class="cart__empty">
     <img src="assets/images/illustration-empty-cart.svg" alt="" width="128" height="128" />
     <p>Your added items will appear here</p>
   </div>
@@ -10,19 +10,19 @@
   <!-- Cart with items -->
   <ng-template #filledCart>
     <ul class="cart__list">
-      <li *ngFor="let item of items; trackBy: trackByName" class="cart__item">
+      <li *ngFor="let item of cart.items; trackBy: trackByName" class="cart__item">
         <div>
           <p class="cart__name">{{ item.product.name }}</p>
           <p class="cart__meta">
             <span class="cart__qty">{{ item.quantity }}x</span>
             <span class="cart__unit">&#64; {{ item.product.price | currency: 'USD' }}</span>
-            <span class="cart__line">{{ item.product.price * item.quantity | currency: 'USD' }}</span>
+            <span class="cart__line">{{ utils.lineTotal(item) | currency: 'USD' }}</span>
           </p>
         </div>
         <button
           type="button"
           class="cart__remove"
-          (click)="remove.emit(item.product)"
+          (click)="cart.remove(item.product)"
           [attr.aria-label]="'Remove ' + item.product.name + ' from cart'"
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
@@ -37,7 +37,7 @@
 
     <div class="cart__total">
       <span>Order Total</span>
-      <strong>{{ totalPrice | currency: 'USD' }}</strong>
+      <strong>{{ cart.totalPrice | currency: 'USD' }}</strong>
     </div>
 
     <p class="cart__carbon">
