@@ -29,7 +29,7 @@ An Angular app where you can browse desserts, add them to a cart, change quantit
 | `*ngIf` / `else` | Add to Cart vs stepper, empty vs filled cart, modal, no-products message |
 | `ngClass` | red border on products in the cart |
 | `ngStyle` | staggered fade-in delay on product cards |
-| `@Input()` / `@Output()` + `EventEmitter` | data flows down from `AppComponent`, user actions flow back up |
+| `@Input()` / `@Output()` + `EventEmitter` | `ProductList` passes each `product` down to `ProductCard`; `Cart` emits `confirm` and `OrderConfirmation` emits `startNew` so `AppComponent` can open and close the modal |
 | Lifecycle hooks | `ngOnInit` (load products, lock scroll), `ngAfterViewInit` (focus modal button), `ngOnDestroy` (clean up) |
 
 ## Services (FEM11)
@@ -60,12 +60,12 @@ Providing a service in `root` gives the whole app one shared copy that lives as 
 ## Component structure
 
 ```
-AppComponent (owns products + cart state)
-├── ProductListComponent
-│   └── ProductCardComponent (× 9)
-├── CartComponent
-├── OrderConfirmationComponent (shown after Confirm Order)
-└── ToastComponent
+AppComponent (only opens and closes the order modal)
+├── ProductListComponent       ← ProductService
+│   └── ProductCardComponent (× 9) ← CartService, ToastService
+├── CartComponent              ← CartService, UtilityService
+├── OrderConfirmationComponent ← CartService, own LoggerService
+└── ToastComponent             ← ToastService
 ```
 
 ## Run locally
