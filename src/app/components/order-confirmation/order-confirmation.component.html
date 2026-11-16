@@ -12,7 +12,7 @@
 
     <div class="summary">
       <ul>
-        <li *ngFor="let item of items; trackBy: trackByName" class="summary__item">
+        <li *ngFor="let item of cart.items; trackBy: trackByName" class="summary__item">
           <img
             class="summary__thumb"
             [src]="item.product.image.thumbnail"
@@ -27,13 +27,13 @@
               <span class="summary__unit">&#64; {{ item.product.price | currency: 'USD' }}</span>
             </p>
           </div>
-          <p class="summary__line">{{ item.product.price * item.quantity | currency: 'USD' }}</p>
+          <p class="summary__line">{{ utils.lineTotal(item) | currency: 'USD' }}</p>
         </li>
       </ul>
 
       <div class="summary__total">
         <span>Order Total</span>
-        <strong>{{ totalPrice | currency: 'USD' }}</strong>
+        <strong>{{ cart.totalPrice | currency: 'USD' }}</strong>
       </div>
     </div>
 

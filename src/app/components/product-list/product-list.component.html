@@ -7,12 +7,7 @@
       class="products__item"
       [ngStyle]="{ 'animation-delay': i * 60 + 'ms' }"
     >
-      <app-product-card
-        [product]="product"
-        [quantity]="quantityOf(product)"
-        (add)="add.emit($event)"
-        (decrease)="decrease.emit($event)"
-      ></app-product-card>
+      <app-product-card [product]="product"></app-product-card>
     </li>
   </ul>
 

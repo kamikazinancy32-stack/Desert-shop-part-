@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-toast',
@@ -7,9 +8,9 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   template: `
     <div class="toast-region" role="status" aria-live="polite">
-      <p *ngIf="message" class="toast">
+      <p *ngIf="toastService.message" class="toast">
         <img src="assets/images/icon-order-confirmed.svg" alt="" width="20" height="20" />
-        {{ message }}
+        {{ toastService.message }}
       </p>
     </div>
   `,
@@ -49,5 +50,6 @@ import { CommonModule } from '@angular/common';
   ],
 })
 export class ToastComponent {
-  @Input() message = '';
+  // Public so the template can read the message.
+  constructor(public toastService: ToastService) {}
 }
