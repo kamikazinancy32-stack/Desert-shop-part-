@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartItem, Product } from '../../models/product.model';
+import { Product } from '../../models/product.model';
 import { ProductCardComponent } from '../product-card/product-card.component';
+import { ProductService } from '../../services/product.service';
 
 @Component({
   selector: 'app-product-list',
@@ -10,17 +11,14 @@ import { ProductCardComponent } from '../product-card/product-card.component';
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
-export class ProductListComponent {
-  @Input() products: Product[] = [];
-  @Input() cartItems: CartItem[] = [];
+export class ProductListComponent implements OnInit {
+  products: Product[] = [];
 
-  @Output() add = new EventEmitter<Product>();
-  @Output() decrease = new EventEmitter<Product>();
+  constructor(private productService: ProductService) {}
 
-  /** Looks up how many of a product are in the cart. */
-  quantityOf(product: Product): number {
-    const item = this.cartItems.find((i) => i.product.name === product.name);
-    return item ? item.quantity : 0;
+  /** Runs once when the list appears: ask the service for the desserts. */
+  ngOnInit(): void {
+    this.products = this.productService.getProducts();
   }
 
   /** Helps *ngFor keep the same DOM element for each product. */
