@@ -60,12 +60,12 @@ Providing a service in `root` gives the whole app one shared copy that lives as 
 ## Component structure
 
 ```
-AppComponent (owns products + cart state)
-├── ProductListComponent
-│   └── ProductCardComponent (× 9)
-├── CartComponent
-├── OrderConfirmationComponent (shown after Confirm Order)
-└── ToastComponent
+AppComponent (only opens and closes the order modal)
+├── ProductListComponent       ← ProductService
+│   └── ProductCardComponent (× 9) ← CartService, ToastService
+├── CartComponent              ← CartService, UtilityService
+├── OrderConfirmationComponent ← CartService, own LoggerService
+└── ToastComponent             ← ToastService
 ```
 
 ## Run locally
