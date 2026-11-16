@@ -29,7 +29,7 @@ An Angular app where you can browse desserts, add them to a cart, change quantit
 | `*ngIf` / `else` | Add to Cart vs stepper, empty vs filled cart, modal, no-products message |
 | `ngClass` | red border on products in the cart |
 | `ngStyle` | staggered fade-in delay on product cards |
-| `@Input()` / `@Output()` + `EventEmitter` | data flows down from `AppComponent`, user actions flow back up |
+| `@Input()` / `@Output()` + `EventEmitter` | `ProductList` passes each `product` down to `ProductCard`; `Cart` emits `confirm` and `OrderConfirmation` emits `startNew` so `AppComponent` can open and close the modal |
 | Lifecycle hooks | `ngOnInit` (load products, lock scroll), `ngAfterViewInit` (focus modal button), `ngOnDestroy` (clean up) |
 
 ## Services (FEM11)
