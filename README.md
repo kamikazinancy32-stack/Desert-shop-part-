@@ -51,6 +51,11 @@ The app logic and the shared cart now live in services in `src/app/services/`. C
 - **Root** (`@Injectable({ providedIn: 'root' })`): Angular creates one shared copy (a singleton) for the whole app. All five services are provided this way. That is why adding a dessert in a product card updates the cart and the order summary straight away: they all read the same `CartService`.
 - **Component** (`providers: [LoggerService]` in `OrderConfirmationComponent`): the component gets its own copy, created when the component appears and destroyed when it goes away. In the browser console, cart actions log as `[Logger #1]` (the root copy), while the order modal logs as `#2`, then `#3` for the next order, and so on.
 
+### Discussion question
+
+**What is the difference between providing a service in root versus in a component's providers array? Describe a scenario where you might not want a service to be a singleton.**
+
+Providing a service in `root` gives the whole app one shared copy that lives as long as the app does. That suits data everyone must agree on, like the cart. Putting a service in a component's `providers` array gives that component (and its children) a private copy that is created and destroyed with the component. You would not want a singleton when each part of the screen needs its own separate data. For example, if a page shows two independent forms that each track their own step or unsaved input, sharing one service would mix their data. Giving each form its own copy keeps them apart and starts each one fresh.
 
 ## Component structure
 
