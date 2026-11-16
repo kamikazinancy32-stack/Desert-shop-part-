@@ -32,6 +32,26 @@ An Angular app where you can browse desserts, add them to a cart, change quantit
 | `@Input()` / `@Output()` + `EventEmitter` | data flows down from `AppComponent`, user actions flow back up |
 | Lifecycle hooks | `ngOnInit` (load products, lock scroll), `ngAfterViewInit` (focus modal button), `ngOnDestroy` (clean up) |
 
+## Services (FEM11)
+
+The app logic and the shared cart now live in services in `src/app/services/`. Components get the services they need through constructor injection, for example `constructor(private cartService: CartService) {}`, instead of receiving cart data from `AppComponent` with `@Input()`/`@Output()`.
+
+| Service | What it does | Used by |
+|---|---|---|
+| `CartService` | Holds the cart (shared state) in a private array with a public `items` getter: `add`, `decrease`, `remove`, `clear`, `quantityOf`, `totalQuantity`, `totalPrice` | `ProductCard`, `Cart`, `OrderConfirmation`, `AppComponent` |
+| `ProductService` | `getProducts()` returns the desserts from `data/products.ts` | `ProductList` |
+| `UtilityService` | Shared calculations: `lineTotal`, `totalQuantity`, `totalPrice` | `CartService`, `Cart`, `OrderConfirmation` |
+| `LoggerService` | `log` and `error` messages in the console, labelled with the logger's number (`#1`, `#2`, ...) | `CartService`, `OrderConfirmation` |
+| `ToastService` | Holds the "added to cart" message and clears it after 2 seconds | `ProductCard`, `Toast`, `AppComponent` |
+
+`CartService` itself injects `UtilityService` and `LoggerService`, which shows that services can depend on other services.
+
+### Root vs. component-level providers
+
+- **Root** (`@Injectable({ providedIn: 'root' })`): Angular creates one shared copy (a singleton) for the whole app. All five services are provided this way. That is why adding a dessert in a product card updates the cart and the order summary straight away: they all read the same `CartService`.
+- **Component** (`providers: [LoggerService]` in `OrderConfirmationComponent`): the component gets its own copy, created when the component appears and destroyed when it goes away. In the browser console, cart actions log as `[Logger #1]` (the root copy), while the order modal logs as `#2`, then `#3` for the next order, and so on.
+
+
 ## Component structure
 
 ```
