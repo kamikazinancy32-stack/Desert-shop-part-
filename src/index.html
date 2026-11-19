@@ -8,6 +8,16 @@
   <meta name="description" content="Browse desserts, add them to your cart and confirm your order.">
   <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
   <link rel="preload" href="assets/fonts/RedHatText-VariableFont_wght.ttf" as="font" type="font/ttf" crossorigin>
+  <!-- Relative font URL so it also works when the site is served from a sub-folder (GitHub Pages) -->
+  <style>
+    @font-face {
+      font-family: 'Red Hat Text';
+      src: url('assets/fonts/RedHatText-VariableFont_wght.ttf') format('truetype');
+      font-weight: 400 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
 </head>
 <body>
   <app-root></app-root>
