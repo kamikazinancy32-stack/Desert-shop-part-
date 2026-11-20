@@ -1,17 +1,80 @@
 <section class="products" aria-labelledby="products-title">
   <h1 id="products-title" class="products__title">Desserts</h1>
 
-  <ul *ngIf="products.length > 0; else noProducts" class="products__grid">
-    <li
-      *ngFor="let product of products; let i = index; trackBy: trackByName"
-      class="products__item"
-      [ngStyle]="{ 'animation-delay': i * 60 + 'ms' }"
-    >
-      <app-product-card [product]="product"></app-product-card>
-    </li>
-  </ul>
+  <!-- Search + category filter. Both are reactive form controls. -->
+  <form class="filters" role="search" (submit)="$event.preventDefault()">
+    <div class="filters__field filters__field--search">
+      <label for="product-search" class="visually-hidden">Search desserts by name</label>
+      <input
+        id="product-search"
+        class="filters__input"
+        type="search"
+        placeholder="Search desserts…"
+        autocomplete="off"
+        [formControl]="searchControl"
+      />
+    </div>
 
-  <ng-template #noProducts>
-    <p class="products__empty">No desserts are available right now. Please check back soon.</p>
-  </ng-template>
+    <div class="filters__field">
+      <label for="product-category" class="visually-hidden">Filter by category</label>
+      <select id="product-category" class="filters__input" [formControl]="categoryControl">
+        <option *ngFor="let category of categories$ | async" [value]="category">
+          {{ category === 'All' ? 'All categories' : category }}
+        </option>
+      </select>
+    </div>
+  </form>
+
+  <ng-container *ngIf="state$ | async as state">
+    <p class="products__status" role="status" aria-live="polite">
+      <ng-container *ngIf="searchControl.value.trim().length === 1; else statusText">
+        Type at least {{ minSearchLength }} letters to search.
+      </ng-container>
+      <ng-template #statusText>
+        <ng-container *ngIf="state.loading; else resultCount">
+          Loading desserts…
+        </ng-container>
+        <ng-template #resultCount>
+          <ng-container *ngIf="!state.error && hasActiveFilters(state.filters)">
+            {{ state.products.length }} {{ state.products.length === 1 ? 'dessert' : 'desserts' }} found
+          </ng-container>
+        </ng-template>
+      </ng-template>
+    </p>
+
+    <!-- Error: the search failed, but the search box still works -->
+    <p *ngIf="state.error; else results" class="products__empty products__empty--error" role="alert">
+      {{ state.error }}
+    </p>
+
+    <ng-template #results>
+      <ul
+        *ngIf="state.products.length > 0; else noProducts"
+        class="products__grid"
+        [class.products__grid--loading]="state.loading"
+        [attr.aria-busy]="state.loading"
+      >
+        <li
+          *ngFor="let product of state.products; let i = index; trackBy: trackByName"
+          class="products__item"
+          [ngStyle]="{ 'animation-delay': i * 60 + 'ms' }"
+        >
+          <app-product-card [product]="product"></app-product-card>
+        </li>
+      </ul>
+    </ng-template>
+
+    <ng-template #noProducts>
+      <!-- Nothing to show yet while the first load is running -->
+      <ng-container *ngIf="!state.loading">
+        <div *ngIf="hasActiveFilters(state.filters); else emptyMenu" class="products__empty">
+          <p>No desserts match your search.</p>
+          <button type="button" class="products__clear" (click)="clearFilters()">Clear filters</button>
+        </div>
+        <ng-template #emptyMenu>
+          <p class="products__empty">No desserts are available right now. Please check back soon.</p>
+        </ng-template>
+      </ng-container>
+    </ng-template>
+  </ng-container>
 </section>
