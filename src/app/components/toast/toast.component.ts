@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
@@ -8,9 +9,9 @@ import { ToastService } from '../../services/toast.service';
   imports: [CommonModule],
   template: `
     <div class="toast-region" role="status" aria-live="polite">
-      <p *ngIf="toastService.message" class="toast">
+      <p *ngIf="message$ | async as message" class="toast">
         <img src="assets/images/icon-order-confirmed.svg" alt="" width="20" height="20" />
-        {{ toastService.message }}
+        {{ message }}
       </p>
     </div>
   `,
@@ -50,6 +51,10 @@ import { ToastService } from '../../services/toast.service';
   ],
 })
 export class ToastComponent {
-  // Public so the template can read the message.
-  constructor(public toastService: ToastService) {}
+  /** The current message ('' hides the toast). The async pipe handles the subscription. */
+  readonly message$: Observable<string>;
+
+  constructor(toastService: ToastService) {
+    this.message$ = toastService.message$;
+  }
 }
