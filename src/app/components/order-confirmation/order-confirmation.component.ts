@@ -9,7 +9,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartItem } from '../../models/product.model';
+import { Observable, take } from 'rxjs';
+import { CartItem, CartSummary } from '../../models/product.model';
 import { CartService } from '../../services/cart.service';
 import { UtilityService } from '../../services/utility.service';
 import { LoggerService } from '../../services/logger.service';
@@ -34,17 +35,27 @@ export class OrderConfirmationComponent implements OnInit, AfterViewInit, OnDest
 
   @ViewChild('startButton') startButton?: ElementRef<HTMLButtonElement>;
 
-  // cart and utils are public so the template can use them.
+  /** The order being confirmed. Read in the template with the async pipe. */
+  readonly summary$: Observable<CartSummary>;
+
+  // utils is public so the template can use lineTotal().
   constructor(
-    public cart: CartService,
+    private cart: CartService,
     public utils: UtilityService,
     private logger: LoggerService,
-  ) {}
+  ) {
+    this.summary$ = this.cart.summary$;
+  }
 
   /** Runs once when the modal appears: stop the page behind it from scrolling. */
   ngOnInit(): void {
     document.body.classList.add('modal-open');
-    this.logger.log(`Order confirmed: ${this.cart.totalQuantity} items, total ${this.cart.totalPrice.toFixed(2)}`);
+    // take(1): read the current cart once for the log. The cart lives in a
+    // BehaviorSubject, so it emits straight away and take(1) then completes
+    // the subscription by itself, so there is nothing to unsubscribe later.
+    this.cart.summary$.pipe(take(1)).subscribe(({ totalQuantity, totalPrice }) =>
+      this.logger.log(`Order confirmed: ${totalQuantity} items, total ${totalPrice.toFixed(2)}`),
+    );
   }
 
   /** Runs after the modal's HTML exists: move keyboard focus into it. */

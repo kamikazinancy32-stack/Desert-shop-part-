@@ -1,11 +1,11 @@
-<article class="card">
+<article class="card" *ngIf="{ quantity: (quantity$ | async) ?? 0 } as cart">
   <div class="card__media">
     <picture>
       <source media="(min-width: 1024px)" [srcset]="product.image.desktop" width="502" height="480" />
       <source media="(min-width: 640px)" [srcset]="product.image.tablet" width="427" height="424" />
       <img
         class="card__image"
-        [ngClass]="{ 'card__image--selected': inCart }"
+        [ngClass]="{ 'card__image--selected': cart.quantity > 0 }"
         [src]="product.image.mobile"
         [alt]="product.name"
         width="654"
@@ -15,7 +15,7 @@
 
     <!-- Not in the cart yet: show "Add to Cart" -->
     <button
-      *ngIf="!inCart; else stepper"
+      *ngIf="cart.quantity === 0; else stepper"
       type="button"
       class="add-btn"
       (click)="onAdd()"
@@ -37,7 +37,7 @@
             <path fill="currentColor" d="M0 .375h10v1.25H0V.375Z" />
           </svg>
         </button>
-        <span class="stepper__count" aria-live="polite">{{ quantity }}</span>
+        <span class="stepper__count" aria-live="polite">{{ cart.quantity }}</span>
         <button
           type="button"
           class="stepper__btn"

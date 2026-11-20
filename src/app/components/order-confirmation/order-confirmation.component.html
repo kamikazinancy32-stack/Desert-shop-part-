@@ -1,3 +1,4 @@
+<ng-container *ngIf="summary$ | async as summary">
 <div class="overlay">
   <div
     class="modal"
@@ -12,7 +13,7 @@
 
     <div class="summary">
       <ul>
-        <li *ngFor="let item of cart.items; trackBy: trackByName" class="summary__item">
+        <li *ngFor="let item of summary.items; trackBy: trackByName" class="summary__item">
           <img
             class="summary__thumb"
             [src]="item.product.image.thumbnail"
@@ -33,7 +34,7 @@
 
       <div class="summary__total">
         <span>Order Total</span>
-        <strong>{{ cart.totalPrice | currency: 'USD' }}</strong>
+        <strong>{{ summary.totalPrice | currency: 'USD' }}</strong>
       </div>
     </div>
 
@@ -42,3 +43,4 @@
     </button>
   </div>
 </div>
+</ng-container>
