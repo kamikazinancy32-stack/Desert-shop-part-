@@ -1,8 +1,9 @@
+<ng-container *ngIf="summary$ | async as summary">
 <aside class="cart" aria-labelledby="cart-title">
-  <h2 id="cart-title" class="cart__title">Your Cart ({{ cart.totalQuantity }})</h2>
+  <h2 id="cart-title" class="cart__title">Your Cart ({{ summary.totalQuantity }})</h2>
 
   <!-- Empty cart -->
-  <div *ngIf="cart.items.length === 0; else filledCart" class="cart__empty">
+  <div *ngIf="summary.items.length === 0; else filledCart" class="cart__empty">
     <img src="assets/images/illustration-empty-cart.svg" alt="" width="128" height="128" />
     <p>Your added items will appear here</p>
   </div>
@@ -10,7 +11,7 @@
   <!-- Cart with items -->
   <ng-template #filledCart>
     <ul class="cart__list">
-      <li *ngFor="let item of cart.items; trackBy: trackByName" class="cart__item">
+      <li *ngFor="let item of summary.items; trackBy: trackByName" class="cart__item">
         <div>
           <p class="cart__name">{{ item.product.name }}</p>
           <p class="cart__meta">
@@ -37,7 +38,7 @@
 
     <div class="cart__total">
       <span>Order Total</span>
-      <strong>{{ cart.totalPrice | currency: 'USD' }}</strong>
+      <strong>{{ summary.totalPrice | currency: 'USD' }}</strong>
     </div>
 
     <p class="cart__carbon">
@@ -48,3 +49,4 @@
     <button type="button" class="btn-primary" (click)="confirm.emit()">Confirm Order</button>
   </ng-template>
 </aside>
+</ng-container>
